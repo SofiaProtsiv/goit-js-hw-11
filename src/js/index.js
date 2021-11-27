@@ -1,12 +1,12 @@
 "use strict";
 
 import getRefs from '../js/getRefs';
+import SimpleLightbox from "simplelightbox";
+import "simplelightbox/dist/simple-lightbox.min.css";
 import Notiflix from 'notiflix';
 import debounce from 'lodash.debounce';
 import apiService from  './fetchPhotos'
 import galleryList from '../templates/galleryList.hbs';
-import SimpleLightbox from "simplelightbox";
-import "simplelightbox/dist/simple-lightbox.min.css";
 
 
 const refs = getRefs();
@@ -29,7 +29,6 @@ function onSubmit (event) {
     refs.galleryList.innerHTML = '';
     return Notiflix.Notify.warning("Sorry, there are no images matching your search query. Please try again.");
   } 
-  
   refs.galleryList.innerHTML = '';
   apiService.resetPage();
   fetchPhotos();
@@ -39,14 +38,12 @@ function fetchPhotos() {
   spinnerOn();
   hideButton();
   disableButton();
+
   apiService.fetchPhotos()
   .then(photo => {
       const markup = galleryList(photo.hits);    
       refs.galleryList.insertAdjacentHTML('beforeend', markup);
-      
-      refs.galleryList.addEventListener('click', function(){
-        const modal = new SimpleLightbox('.gallery a', { captions: true, captionsData: 'alt', captionDelay: 250 });
-      });
+      const modal = new SimpleLightbox('.gallery a');
 
       const { height: cardHeight } = document.querySelector(".gallery").firstElementChild.getBoundingClientRect();
       window.scrollBy({
@@ -59,7 +56,7 @@ function fetchPhotos() {
         Notiflix.Notify.failure("Sorry, there are no images matching your search query. Please try again.");
       }
       if(apiService.page === 2){
-        return Notiflix.Notify.info(`Hooray! We found ${photo.totalHits} images.`)
+        Notiflix.Notify.info(`Hooray! We found ${photo.totalHits} images.`)
       }
       if (((apiService.page-1) * apiService.perPage) >= photo.totalHits) {
         hideButton();
