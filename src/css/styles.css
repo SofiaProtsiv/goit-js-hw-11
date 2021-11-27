@@ -125,8 +125,10 @@ body {
   display: none;
 }
 .spinner{
-  margin-right: 10px;
-  margin-top: 6px;
+  position: absolute;
+  top: 257px;
+  left: 35%;
+  color: rgb(90, 0, 255);
 }
 .spinner.is-hidden {
   display: none;
