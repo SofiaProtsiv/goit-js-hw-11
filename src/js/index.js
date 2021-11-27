@@ -41,9 +41,9 @@ function fetchPhotos() {
   disableButton();
   apiService.fetchPhotos()
   .then(photo => {
-      const markup = galleryList(photo);
+      const markup = galleryList(photo.hits);    
       refs.galleryList.insertAdjacentHTML('beforeend', markup);
-
+      
       refs.galleryList.addEventListener('click', function(){
         const modal = new SimpleLightbox('.gallery a', { captions: true, captionsData: 'alt', captionDelay: 250 });
       });
